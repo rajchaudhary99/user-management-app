@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Noto Sans", sans-serif;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.container .form {
+  border-radius: 30px;
+  background-color: #1a1a1a;
+  color: #fff;
+  max-width: 360px;
+  padding: 20px;
+}
+.form .title {
+  color: #43c7e8;
+  font-size: 30px;
+  font-weight: 600;
+  padding-left: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.form .title::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+}
+.form .title::after {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  animation: animate 1s linear infinite;
+}
+.title::before,
+.title::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #43c7e8;
+}
+/* Animation */
+@keyframes animate {
+  from {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+  to {
+        transform: scale(1.8) ;
+        opacity: 0;
+    }
+}
+.form .title-message,
+.form .sign-in {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13.5px;
+  font-weight: 400;
+  margin-top: 8px;
+  text-align: center;
+}
+.form .flex {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+.form label input{
+  background-color: #333;
+  color: #fff;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+  font-size: 1rem;
+  padding: 15px 8px 15px 8px;
+  outline: 0;
+  width: 100%;
+  margin-bottom: 15px;
+}
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+.submit {
+  border: none;
+  background-color: #43c7e8;
+  margin-top: 10px;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  width: 100%;
+}
+.submit:hover {
+  background-color: #32a7c4;
+}
+</style>
+</head>
+<body>
+
+  <div class="container">
+   <form class="form" id="registerForm">
+      <h2 class="title">Register</h2>
+      <div>
+        <label>
+          <input type="text" id="name" placeholder="Enter Your Name" name="name" required >
+        </label>
+      </div>
+      <label>
+        <input type="email" id="email" placeholder="Email" name="email" required >
+      </label>
+      <label>
+        <input type="password" id="password" placeholder="Password" name="password" required >
+      </label>
+      <label>
+        <input type="text" id="phoneNo" placeholder="Enter Your Phone Number" name="phoneNo" required >
+      </label>
+      <label>
+        <input type="text" id="profession" placeholder="Profession" name="profession" required >
+      </label>
+      <button type="submit" class="btn btn-primary submit">Register</button>
+      <div id="notification"></div>
+   </form>
+</div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const phoneNo = document.getElementById('phoneNo').value;
+  const profession = document.getElementById('profession').value;
+
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, password, phoneNo, profession })
+    });
+
+    console.log('Response status:', response.status); // Debugging line
+    const result = await response.json();
+    document.getElementById('notification').innerText = result.message || result.error;
+
+    if (response.ok) {
+      window.location.href = '/login';
+    }
+  } catch (error) {
+    document.getElementById('notification').innerText = 'Error registering user';
+    console.error('Error:', error); // Debugging line
+  }
+});
+
+  </script>
+  
+</body>
+</html>
